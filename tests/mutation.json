@@ -1,0 +1,40 @@
+{
+  "_about": [
+    "Mutation target for the theme installer. A theme is data, so install.sh is",
+    "the only executable surface — the file a broken cd/guard would silently",
+    "corrupt. The colour contract itself is pinned by the unit/regression tests."
+  ],
+  "min_kill_rate": 0.80,
+  "timeout": 120,
+  "targets": [
+    {
+      "path": "install.sh",
+      "lang": "shell",
+      "tests": [
+        "bash",
+        "tests/shell/test_install.sh"
+      ],
+      "equivalent": [
+        {
+          "line": 13,
+          "kind": "number±1",
+          "reason": "the mutated digit is the file descriptor in '>&2'; '>&3' only redirects the diagnostic to an unopened fd. Control flow and exit status are unchanged, and no test asserts on the diagnostic stream."
+        }
+      ]
+    }
+  ],
+  "exempt": [
+    {
+      "path": "colors.toml",
+      "reason": "theme DATA, not code — there is nothing to mutate. Its correctness (every slot present, well-formed colours, WCAG contrast) is asserted directly by tests/test_unit_theme.py and tests/test_regression_theme.py."
+    },
+    {
+      "path": "tools/mutator.py",
+      "reason": "vendored byte-identical engine tooling, not theme source"
+    },
+    {
+      "path": "tools/policy_check.py",
+      "reason": "vendored byte-identical engine tooling, not theme source"
+    }
+  ]
+}

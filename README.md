@@ -40,6 +40,8 @@ colors.toml                 # the palette every templated app is rendered from
 backgrounds/0-amber-glow.png
 preview.png                 # theme-switcher thumbnail
 unlock.png                  # lock screen
+tests/                      # unit, regression and shell checks for the palette + installer
+tools/                      # policy-as-code, test runner and mutation runner
 ```
 
 ## Notes
@@ -48,6 +50,24 @@ unlock.png                  # lock screen
 - Thunderbird's chrome is themed by the separate `omarchy-thunderbird` plugin; a
   theme the plugin's renderer does not know will fall back to its base colours until
   that renderer is made palette-agnostic.
+
+## Testing
+
+A theme is data, so the harness pins the data contract rather than mutating code.
+
+```bash
+make test      # policy -> unit -> regression -> shell -> mutation
+make check     # the same without the mutation pass
+```
+
+- **unit** — every colour slot a stock theme declares is present, every value is a
+  well-formed colour, the background really is black, and the palette meets WCAG
+  AA/AAA contrast ratios on it.
+- **regression** — slot parity (no slot silently dropped), the Hyprland active-border
+  style, and that the installer copies every shipped asset.
+- **shell** + **mutation** — `install.sh` installs into a throwaway `XDG_CONFIG_HOME`,
+  refuses a half-install when an asset is missing, and is the single mutation target
+  (the only code a theme ships).
 
 ## Licence
 

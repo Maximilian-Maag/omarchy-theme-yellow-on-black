@@ -1,0 +1,34 @@
+{
+  "checker": 3,
+  "plugin": false,
+  "shell_style": true,
+  "shebang": "bash",
+  "ignore": [],
+  "allow": {
+    "symlinks": {},
+    "artifacts": {},
+    "secrets": {},
+    "abs_path": {}
+  },
+  "tests": {
+    "kinds": [
+      "unit",
+      "regression",
+      "shell"
+    ],
+    "files": {
+      "unit": "tests/test_unit_*.py",
+      "regression": "tests/test_regression_*.py",
+      "shell": "tests/shell/test_*.sh"
+    },
+    "runner": "tools/run_tests.sh",
+    "mutator": "tools/mutator.py",
+    "mutation_config": "tests/mutation.json",
+    "ci": ".github/workflows/test.yml",
+    "note": "a theme is data, not code: the contract is colors.toml's colour slots plus the installer's behaviour",
+    "min_kill_rate": 0.8,
+    "source_globs": [
+      "install.sh"
+    ]
+  }
+}
