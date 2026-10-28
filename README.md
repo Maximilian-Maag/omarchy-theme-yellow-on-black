@@ -37,6 +37,7 @@ so its `colors.toml`, background and lock-screen art are all kept as-is.
 
 ```
 colors.toml                 # the palette every templated app is rendered from
+icons.theme                 # Yaru-yellow — the GNOME icon theme omarchy-theme-set-gnome reads
 backgrounds/0-amber-glow.png
 preview.png                 # theme-switcher thumbnail
 unlock.png                  # lock screen
@@ -47,6 +48,9 @@ tools/                      # policy-as-code, test runner and mutation runner
 ## Notes
 
 - Switching is `omarchy theme set "<name>"` (or the switcher); it is reversible.
+- `icons.theme` names `Yaru-yellow`, matching the theme accent, so the GNOME icon theme follows
+  the theme (every stock Omarchy theme ships one; without it `omarchy-theme-set-gnome` falls back
+  to `Yaru-blue`).
 - Thunderbird's chrome is themed by the separate `omarchy-thunderbird` plugin; a
   theme the plugin's renderer does not know will fall back to its base colours until
   that renderer is made palette-agnostic.

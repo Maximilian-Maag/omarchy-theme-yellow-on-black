@@ -36,6 +36,15 @@ class SlotParityTests(unittest.TestCase):
         missing = [slot for slot in STOCK_SLOTS if slot not in data]
         self.assertEqual(missing, [], "the theme dropped slot(s): %s" % missing)
 
+    def test_icons_theme_names_a_matching_yaru_variant(self):
+        # Every stock theme ships icons.theme and omarchy-theme-set-gnome reads it,
+        # falling back to a hardcoded Yaru-blue when absent. The value must be a real
+        # installed Yaru variant, not an invented name.
+        value = (ROOT / "icons.theme").read_text().strip()
+        self.assertTrue(value.startswith("Yaru"), "icons.theme must name a Yaru variant")
+        self.assertTrue(pathlib.Path("/usr/share/icons", value).is_dir(),
+                        "%s is not an installed icon theme" % value)
+
     def test_the_active_border_is_styled(self):
         # a Hyprland theme that leaves this out shows the default focused-window
         # frame, which is how an off-brand border ships unnoticed
@@ -47,11 +56,11 @@ class InstallerCoverageTests(unittest.TestCase):
         # a shipped-but-not-installed file renders the fallback, so catch the case
         # where an asset is added to the repo but install.sh never copies it
         script = INSTALL.read_text()
-        for asset in ("colors.toml", "backgrounds", "preview.png", "unlock.png"):
+        for asset in ("colors.toml", "icons.theme", "backgrounds", "preview.png", "unlock.png"):
             self.assertIn(asset, script, "%s is shipped but the installer ignores it" % asset)
 
     def test_every_promised_asset_exists(self):
-        for asset in ("colors.toml", "install.sh", "preview.png", "unlock.png"):
+        for asset in ("colors.toml", "icons.theme", "install.sh", "preview.png", "unlock.png"):
             self.assertTrue((ROOT / asset).is_file(), asset)
 
 

@@ -47,6 +47,12 @@ else
   bad "preview/unlock images missing"
 fi
 
+if [[ -f "$ROOT/icons.theme" && "$(cat "$DEST/icons.theme" 2>/dev/null)" == "$(cat "$ROOT/icons.theme")" ]]; then
+  ok "icons.theme installed and matches the source"
+else
+  bad "icons.theme missing or differing"
+fi
+
 # 3. the real config dir was never touched: the install landed inside the temp HOME
 if [[ $DEST == $HOME/* ]]; then
   ok "isolation: ran under a temp HOME"
