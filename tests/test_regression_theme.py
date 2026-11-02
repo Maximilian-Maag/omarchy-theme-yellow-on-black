@@ -42,6 +42,11 @@ class SlotParityTests(unittest.TestCase):
         # installed Yaru variant, not an invented name.
         value = (ROOT / "icons.theme").read_text().strip()
         self.assertTrue(value.startswith("Yaru"), "icons.theme must name a Yaru variant")
+        # Only an Omarchy box ships the Yaru family (CI runners do not), so verify the
+        # name resolves to a real theme where that is checkable, and skip otherwise —
+        # a hard assert here turned the whole suite red on every non-Omarchy runner.
+        if not pathlib.Path("/usr/share/icons/Yaru").is_dir():
+            self.skipTest("Yaru icon themes are not installed (not an Omarchy machine)")
         self.assertTrue(pathlib.Path("/usr/share/icons", value).is_dir(),
                         "%s is not an installed icon theme" % value)
 
