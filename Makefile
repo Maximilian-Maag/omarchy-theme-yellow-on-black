@@ -1,4 +1,4 @@
-.PHONY: test check lint mutation
+.PHONY: test check lint mutation install
 
 # A theme is data, so the harness is small: the palette's contract plus the installer.
 test:
@@ -13,3 +13,7 @@ lint:
 
 mutation:
 	@python3 tools/mutator.py
+
+# Symlink the theme into ~/.config/omarchy/themes/yellow-on-black/ (no root).
+install:
+	@bash install.sh

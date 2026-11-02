@@ -52,12 +52,21 @@ class SlotParityTests(unittest.TestCase):
 
 
 class InstallerCoverageTests(unittest.TestCase):
-    def test_the_installer_copies_every_shipped_asset(self):
+    def test_the_installer_references_every_shipped_asset(self):
         # a shipped-but-not-installed file renders the fallback, so catch the case
-        # where an asset is added to the repo but install.sh never copies it
+        # where an asset is added to the repo but install.sh never installs it
         script = INSTALL.read_text()
         for asset in ("colors.toml", "icons.theme", "backgrounds", "preview.png", "unlock.png"):
             self.assertIn(asset, script, "%s is shipped but the installer ignores it" % asset)
+
+    def test_the_installer_links_rather_than_copies(self):
+        # A copy goes stale the moment this repo changes — a file added here never
+        # reaches the desktop until install.sh is re-run. That is exactly how a
+        # shipped icons.theme once failed to apply: the installed copy predated it,
+        # so omarchy-theme-set-gnome fell back to Yaru-blue. The installer must
+        # symlink, so `omarchy theme set` always stages the current repo.
+        script = INSTALL.read_text()
+        self.assertIn("ln -s", script, "the installer must symlink the theme into place")
 
     def test_every_promised_asset_exists(self):
         for asset in ("colors.toml", "icons.theme", "install.sh", "preview.png", "unlock.png"):

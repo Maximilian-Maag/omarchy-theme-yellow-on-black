@@ -23,12 +23,21 @@ per-app code.
 ## Install
 
 ```bash
-omarchy theme install https://github.com/Maximilian-Maag/omarchy-theme-yellow-on-black.git
+git clone https://github.com/Maximilian-Maag/omarchy-theme-yellow-on-black.git
+cd omarchy-theme-yellow-on-black
+make install            # symlinks the theme into ~/.config/omarchy/themes/yellow-on-black/
 omarchy theme set "Yellow On Black"
 ```
 
-Or by hand: copy this directory to `~/.config/omarchy/themes/yellow-on-black/`, then
-`omarchy theme set "Yellow On Black"`.
+`make install` (or `./install.sh`) links the theme files into
+`~/.config/omarchy/themes/yellow-on-black/` rather than copying them. Omarchy
+applies a theme from that directory, so a *copy* goes stale the moment this repo
+changes — a file added here would not reach the desktop until the install was
+re-run. That is exactly how a shipped `icons.theme` once failed to apply: the
+installed copy predated it, so `omarchy-theme-set-gnome` fell back to `Yaru-blue`.
+The symlinks mean `omarchy theme set` always stages the current repo;
+`omarchy-theme-set` copies the staged theme with `cp -r`, which preserves the
+links, so the staged theme reads straight from your clone.
 
 The theme is a *user* theme (written by hand, not cloned by `omarchy theme install`),
 so its `colors.toml`, background and lock-screen art are all kept as-is.
@@ -68,10 +77,12 @@ make check     # the same without the mutation pass
   well-formed colour, the background really is black, and the palette meets WCAG
   AA/AAA contrast ratios on it.
 - **regression** — slot parity (no slot silently dropped), the Hyprland active-border
-  style, and that the installer copies every shipped asset.
-- **shell** + **mutation** — `install.sh` installs into a throwaway `XDG_CONFIG_HOME`,
-  refuses a half-install when an asset is missing, and is the single mutation target
-  (the only code a theme ships).
+  style, and that the installer links every shipped asset.
+- **shell** + **mutation** — `install.sh` links the theme into a throwaway
+  `XDG_CONFIG_HOME`, an edit to the source shows through the install with no
+  re-install (the staleness this repo exists to avoid), it refuses a half-install
+  when an asset is missing, and it is the single mutation target (the only code a
+  theme ships).
 
 ## Licence
 

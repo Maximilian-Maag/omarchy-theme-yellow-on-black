@@ -16,7 +16,7 @@
       ],
       "equivalent": [
         {
-          "line": 13,
+          "line": 20,
           "kind": "number±1",
           "reason": "the mutated digit is the file descriptor in '>&2'; '>&3' only redirects the diagnostic to an unopened fd. Control flow and exit status are unchanged, and no test asserts on the diagnostic stream."
         }
